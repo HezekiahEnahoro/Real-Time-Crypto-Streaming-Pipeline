@@ -1,0 +1,266 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": ["crypto", "streaming"],
+  "templating": { "list": [] },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Crypto Pipeline",
+  "uid": "crypto-pipeline-v1",
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "BTC Price (USD)",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 0,
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "orange", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "time_series",
+        "rawSql": "SELECT hour AS time, hour_close AS value FROM analytics.fct_ohlcv WHERE symbol = 'BTC' ORDER BY hour DESC LIMIT 1",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "ETH Price (USD)",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "time_series",
+        "rawSql": "SELECT hour AS time, hour_close AS value FROM analytics.fct_ohlcv WHERE symbol = 'ETH' ORDER BY hour DESC LIMIT 1",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "SOL Price (USD)",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "purple", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "time_series",
+        "rawSql": "SELECT hour AS time, hour_close AS value FROM analytics.fct_ohlcv WHERE symbol = 'SOL' ORDER BY hour DESC LIMIT 1",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "BNB Price (USD)",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2,
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "yellow", "value": null }] }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "auto"
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "time_series",
+        "rawSql": "SELECT hour AS time, hour_close AS value FROM analytics.fct_ohlcv WHERE symbol = 'BNB' ORDER BY hour DESC LIMIT 1",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Hourly Close Prices (Log Scale)",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 4 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 5,
+            "scaleDistribution": { "type": "log", "log": 10 }
+          },
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "calcs": ["last", "min", "max"] },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "time_series",
+        "rawSql": "SELECT hour AS time, symbol AS metric, hour_close::float AS value FROM analytics.fct_ohlcv WHERE $__timeFilter(hour) ORDER BY time, symbol",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 6,
+      "type": "barchart",
+      "title": "Latest Hour — Volume by Coin (USD)",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "barWidth": 0.7,
+        "groupWidth": 0.7,
+        "legend": { "displayMode": "list", "placement": "bottom" },
+        "orientation": "auto",
+        "tooltip": { "mode": "single" },
+        "xTickLabelRotation": 0
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "table",
+        "rawSql": "SELECT symbol, hour_volume_usd AS \"Volume USD\" FROM analytics.fct_ohlcv WHERE hour = (SELECT MAX(hour) FROM analytics.fct_ohlcv) ORDER BY hour_volume_usd DESC",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "Pipeline Health Checks",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "status" },
+            "properties": [{
+              "id": "custom.displayMode",
+              "value": "color-background"
+            }, {
+              "id": "mappings",
+              "value": [
+                { "type": "value", "options": { "ok":    { "color": "green",  "index": 0 } } },
+                { "type": "value", "options": { "error": { "color": "red",    "index": 1 } } },
+                { "type": "value", "options": { "warn":  { "color": "yellow", "index": 2 } } }
+              ]
+            }]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "sortBy": [{ "displayName": "checked_at", "desc": true }]
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "table",
+        "rawSql": "SELECT check_name, status, details::text AS details, checked_at FROM monitoring.health_checks ORDER BY checked_at DESC LIMIT 10",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 8,
+      "type": "timeseries",
+      "title": "RSI-14 (Overbought >70 / Oversold <30)",
+      "datasource": { "type": "postgres", "uid": "crypto-pg" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "lineWidth": 1, "fillOpacity": 0 },
+          "min": 0,
+          "max": 100,
+          "color": { "mode": "palette-classic" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red",    "value": null },
+              { "color": "green",  "value": 30 },
+              { "color": "red",    "value": 70 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "right", "calcs": ["last"] },
+        "tooltip": { "mode": "multi" }
+      },
+      "targets": [{
+        "datasource": { "type": "postgres", "uid": "crypto-pg" },
+        "format": "time_series",
+        "rawSql": "SELECT hour AS time, symbol AS metric, rsi_14::float AS value FROM analytics.fct_rsi WHERE $__timeFilter(hour) ORDER BY time, symbol",
+        "refId": "A"
+      }]
+    }
+  ]
+}

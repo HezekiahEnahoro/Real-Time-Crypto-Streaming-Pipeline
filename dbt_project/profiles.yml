@@ -1,0 +1,25 @@
+# Passwords here match docker-compose defaults. Change if you override them in .env.
+crypto_pipeline:
+  target: dev
+  outputs:
+    # Used by Airflow (inside Docker network)
+    prod:
+      type: postgres
+      host: postgres-crypto
+      port: 5432
+      user: crypto
+      password: crypto123
+      dbname: crypto_db
+      schema: analytics
+      threads: 2
+
+    # Used for local runs from the host
+    dev:
+      type: postgres
+      host: localhost
+      port: 5434
+      user: crypto
+      password: crypto123
+      dbname: crypto_db
+      schema: analytics
+      threads: 2

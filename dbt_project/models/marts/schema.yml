@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: fct_ohlcv
+    description: Hourly OHLCV candles with moving averages and returns
+    columns:
+      - name: symbol
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['BTC', 'ETH', 'BNB', 'SOL', 'ADA', 'MATIC', 'AVAX', 'DOT']
+      - name: hour
+        tests: [not_null]
+      - name: hour_open
+        tests: [not_null]
+      - name: hour_close
+        tests: [not_null]
+      - name: hour_high
+        tests: [not_null]
+      - name: hour_low
+        tests: [not_null]
+      - name: hour_tick_count
+        tests: [not_null]
+
+  - name: fct_rsi
+    description: 14-period RSI per coin per hour
+    columns:
+      - name: symbol
+        tests: [not_null]
+      - name: hour
+        tests: [not_null]
+
+  - name: fct_bollinger
+    description: 20-period Bollinger Bands per coin per hour
+    columns:
+      - name: symbol
+        tests: [not_null]
+      - name: hour
+        tests: [not_null]
+
+  - name: fct_coin_correlation
+    description: Rolling 24h Pearson correlations between coin pairs
+    columns:
+      - name: hour
+        tests: [not_null]

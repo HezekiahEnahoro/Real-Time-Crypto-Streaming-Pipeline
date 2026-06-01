@@ -1,0 +1,39 @@
+version: 2
+
+sources:
+  - name: raw
+    database: crypto_db
+    schema: raw
+    tables:
+      - name: price_ticks
+        description: Raw price ticks written by the CoinGecko feed via Spark
+        columns:
+          - name: event_id
+            description: UUID for the event
+          - name: symbol
+            description: Coin ticker (BTC, ETH, etc.)
+            tests: [not_null]
+          - name: price_usd
+            description: Spot price in USD
+            tests: [not_null]
+          - name: event_time
+            description: Timestamp from the feed
+            tests: [not_null]
+
+      - name: price_windows
+        description: 5-minute OHLCV windows computed by Spark Structured Streaming
+        columns:
+          - name: symbol
+            tests: [not_null]
+          - name: window_start
+            tests: [not_null]
+          - name: window_end
+          - name: price_open
+          - name: price_close
+          - name: price_high
+          - name: price_low
+          - name: volume_usd
+          - name: vwap
+          - name: tick_count
+          - name: flag_large_move
+          - name: flag_high_volatility

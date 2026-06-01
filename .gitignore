@@ -1,0 +1,29 @@
+# Environment — never commit real credentials
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/.user.yml
+
+# Spark checkpoints and logs
+checkpoints/
+logs/
+*.log
+
+# Docker volumes (if accidentally mounted into project dir)
+postgres-data/
+
+# IDE
+.vscode/
+.idea/
+*.iml
