@@ -83,6 +83,25 @@ services:
     depends_on:
       - spark
 
+  spark-streaming:
+    image: apache/spark:3.5.3
+    restart: unless-stopped
+    command:
+      - bash
+      - -c
+      - |
+        pip install --quiet --target=/tmp/py-deps python-dotenv psycopg2-binary
+        PYTHONPATH=/tmp/py-deps bash /opt/spark-apps/run_streaming.sh
+    volumes:
+      - ./spark:/opt/spark-apps
+      - ./checkpoints:/opt/spark-checkpoints
+      - ./config:/opt/config
+    depends_on:
+      kafka:
+        condition: service_healthy
+      postgres-crypto:
+        condition: service_healthy
+
   postgres-airflow:
     image: postgres:15
     restart: unless-stopped

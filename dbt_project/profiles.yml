@@ -23,3 +23,15 @@ crypto_pipeline:
       dbname: crypto_db
       schema: analytics
       threads: 2
+
+    # Staging schema for the blue-green swap: crypto_analytics DAG builds and
+    # tests here, then swaps into `analytics` only if dbt test passes.
+    staging:
+      type: postgres
+      host: postgres-crypto
+      port: 5432
+      user: crypto
+      password: crypto123
+      dbname: crypto_db
+      schema: analytics_staging
+      threads: 2

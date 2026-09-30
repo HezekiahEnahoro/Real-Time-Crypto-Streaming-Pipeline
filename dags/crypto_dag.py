@@ -126,7 +126,7 @@ run_dbt_task = BashOperator(
     task_id="run_dbt",
     bash_command=(
         "cd /opt/airflow/dbt_project && "
-        "dbt run --profiles-dir /opt/airflow/dbt_project --target prod"
+        "dbt run --profiles-dir /opt/airflow/dbt_project --target staging"
     ),
     dag=analytics_dag,
 )
@@ -135,9 +135,29 @@ dbt_tests_task = BashOperator(
     task_id="dbt_tests",
     bash_command=(
         "cd /opt/airflow/dbt_project && "
-        "dbt test --profiles-dir /opt/airflow/dbt_project --target prod"
+        "dbt test --profiles-dir /opt/airflow/dbt_project --target staging"
     ),
     dag=analytics_dag,
 )
 
-freshness_task >> run_dbt_task >> dbt_tests_task
+
+def swap_analytics_schema(**context):
+    """Promote the tested analytics_staging schema into production (analytics)."""
+    import psycopg2
+    from config.settings import DB_CONFIG
+
+    with psycopg2.connect(**DB_CONFIG) as conn:
+        with conn.cursor() as cur:
+            cur.execute("ALTER SCHEMA analytics RENAME TO analytics_tmp_swap;")
+            cur.execute("ALTER SCHEMA analytics_staging RENAME TO analytics;")
+            cur.execute("ALTER SCHEMA analytics_tmp_swap RENAME TO analytics_staging;")
+    print("Swapped analytics_staging into analytics — tested build is now live")
+
+
+swap_task = PythonOperator(
+    task_id="swap_analytics_schema",
+    python_callable=swap_analytics_schema,
+    dag=analytics_dag,
+)
+
+freshness_task >> run_dbt_task >> dbt_tests_task >> swap_task

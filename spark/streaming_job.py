@@ -25,7 +25,7 @@ from pyspark.sql.types import (
 )
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from config.settings import KAFKA_CONFIG, SPARK_CONFIG, DB_CONFIG, S3_BUCKET, AWS_CONFIG
+from config.settings import KAFKA_CONFIG, SPARK_CONFIG, DB_CONFIG, S3_BUCKET, AWS_CONFIG, PRICE_CHANGE_ALERT_PCT
 
 logger = logging.getLogger(__name__)
 
@@ -196,7 +196,7 @@ def add_anomaly_flags(aggregated_stream):
     """
     return aggregated_stream.withColumn(
         "flag_large_move",
-        F.abs(F.col("window_change_pct")) > 3.0
+        F.abs(F.col("window_change_pct")) > PRICE_CHANGE_ALERT_PCT
     ).withColumn(
         "flag_high_volatility",
         F.col("price_stddev") > F.col("price_avg") * 0.02
